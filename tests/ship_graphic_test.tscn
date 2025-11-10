@@ -1,3 +1,67 @@
-[gd_scene format=3 uid="uid://o0s2qm7akav0"]
+[gd_scene load_steps=9 format=3 uid="uid://o0s2qm7akav0"]
 
-[node name="ShipGraphicTest" type="Node2D"]
+[ext_resource type="Shader" uid="uid://dtly0ans1ssuf" path="res://tests/wireframe1.gdshader" id="1_0wb57"]
+[ext_resource type="Script" uid="uid://dt3vj0frkmwbr" path="res://tests/cube_with_solid.gd" id="2_g1n5e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g1n5e"]
+render_priority = 1
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0, 0.4862745, 0, 1)
+grow = true
+grow_amount = 0.05
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 5
+metadata/_stencil_owned = true
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_pgmmx"]
+next_pass = SubResource("StandardMaterial3D_g1n5e")
+stencil_mode = 1
+stencil_flags = 2
+stencil_color = Color(0, 0.4862745, 0, 1)
+stencil_outline_thickness = 0.05
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_vojgq"]
+material = SubResource("ORMMaterial3D_pgmmx")
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pgmmx"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g1n5e"]
+material = SubResource("StandardMaterial3D_pgmmx")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pgmmx"]
+render_priority = 0
+shader = ExtResource("1_0wb57")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 0.30000000447036
+
+[node name="ShipGraphicTest" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8643873, 0, 0)
+mesh = SubResource("CapsuleMesh_vojgq")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12648773, 0.31498012, 0.13155362)
+visible = false
+mesh = SubResource("BoxMesh_g1n5e")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="MeshInstance3D2"]
+mesh = SubResource("BoxMesh_g1n5e")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_pgmmx")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+
+[node name="Node3D" type="Node3D" parent="MeshInstance3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9966148, 0, 0)
+script = ExtResource("2_g1n5e")
+cube_size = 1.46
+edge_color = Color(0.36078432, 1, 1, 1)
+edge_width = 100.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.7645053, 0, 0.64461744, 0, 1, 0, -0.64461744, 0, 0.7645053, 1.5731969, 0, 1.3929578)
